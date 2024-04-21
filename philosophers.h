@@ -25,14 +25,16 @@ typedef struct s_philo t_philo;
 
 typedef struct s_data
 {
-	int			n_philo;
-	int			time_die;
-	int			time_eat;
-	int			time_sleep;
-	int			must_meals;
-	int			die_flag;
-	size_t		start;
-	t_philo		*philo_arr;
+	int				n_philo;
+	int				time_die;
+	int				time_eat;
+	int				time_sleep;
+	int				must_meals;
+	int				die_flag;
+	size_t			start;
+	pthread_mutex_t	m_print;
+	pthread_mutex_t *spoon_arr;
+	t_philo			*philo_arr;
 }	t_data;
 
 struct s_philo
