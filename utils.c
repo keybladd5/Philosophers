@@ -61,24 +61,27 @@ int	ft_atoi(const char *str)
 
 //take the mutex to print to protect the action, print the current time
 //and print a message based on type var
-void	print_mutex(t_philo *philo, int type)
+void	print_mutex(t_philo *philo, int type, int spoon)
 {
 	pthread_mutex_lock(&philo->data->m_print);
-	printf(ICYAN);
-	printf("%zu miliseconds ▻ ", (get_current_time() - philo->data->start));
-	printf(RESET);
-	if (type == EAT_INIT)
-		printf("philo %d eats\n", philo->nbr);
-	else if (type == EAT_END)
-		printf("philo %d finish eating\n", philo->nbr);
-	else if (type == SPOON)
-		printf("philo %d take the spoon %d\n", philo->nbr, (philo->nbr - 1));
-	else if (type == SPOON2)
-		printf("philo %d take the spoon %d\n", philo->nbr, philo->nbr);
-	else if (type == THINK)
-		printf("philo %d is thinking\n", philo->nbr);
-	else if (type == SLEEP)
-		printf("philo %d is sleeping\n", philo->nbr);
+	if (!dead_loop(philo))
+	{
+		printf(ICYAN);
+		printf("%zu miliseconds ▻ ", (get_current_time() - philo->data->start));
+		printf(RESET);
+		if (type != SPOON)
+			(void)spoon;
+		if (type == EAT_INIT)
+			printf("philo %d eats\n", philo->nbr);
+		else if (type == EAT_END)
+			printf("philo %d finish eating\n", philo->nbr);
+		else if (type == SPOON)
+			printf("philo %d take the spoon %d\n", philo->nbr, spoon);
+		else if (type == THINK)
+			printf("philo %d is thinking\n", philo->nbr);
+		else if (type == SLEEP)
+			printf("philo %d is sleeping\n", philo->nbr);
+	}
 	pthread_mutex_unlock(&philo->data->m_print);
 }
 

@@ -28,19 +28,23 @@ void	debug(t_philo *philo)
 }
 
 int	dead_loop(t_philo *philo)
-{	
-	//pthread_mutex_lock(&philo->data->m_dead);
-	if (((get_current_time() - philo->data->start) - philo->last_meal) >= philo->data->time_die)
+{
+	pthread_mutex_lock(&philo->data->m_dead);
+	if (philo->data->die_flag)
 	{	
-		pthread_mutex_lock(&philo->data->m_print);
-		printf("tiempo de start %zu\n", philo->data->start);
+		/*pthread_mutex_lock(&philo->data->m_print);
+		elapsed_time = get_current_time() - philo->data->start;
+		printf("tiempo de actual %zu\n", elapsed_time);
+		printf("tiempo de last_meal %zu\n", philo->last_meal);
+		printf("resultado : %zu ", elapsed_time - philo->last_meal);
 		printf("tiempo para morir %zu\n", philo->data->time_die);
 		printf("%d ", philo->nbr);
 		printf("filo muerto\n");
-		pthread_mutex_unlock(&philo->data->m_print);
+		pthread_mutex_unlock(&philo->data->m_print);*/
+		pthread_mutex_unlock(&philo->data->m_dead);
 		return (1);
 	}
-	//pthread_mutex_unlock(&philo->data->m_dead);
+	pthread_mutex_unlock(&philo->data->m_dead);
 	return (0);
 }
 //TO-DO: Checker arguments and protect pthread funcs 
@@ -73,6 +77,24 @@ int	main(int argc, char *argv[])
 		pthread_create(&data.philo_arr[i].id, NULL, (void *)routine, &data.philo_arr[i]);
 		i++;
 	}
+	//MONITOR LOOP
+	while (!data.die_flag)	
+	{
+		i = 0;
+		while (i < data.n_philo)
+		{
+			if ((get_current_time() - data.start) > (data.philo_arr[i].last_meal + data.time_die))
+			{
+				pthread_mutex_lock(&data.m_print);
+				printf ("%zu %d", get_current_time() - data.start, data.philo_arr[i].nbr);
+				printf (" has died\n");
+				pthread_mutex_unlock(&data.m_print);
+				data.die_flag = 1;
+				break ;
+			}
+			i++;
+		}
+	}
 	i = 0;
 	while(i < data.n_philo)
 	{
@@ -82,6 +104,7 @@ int	main(int argc, char *argv[])
 	}
 	pthread_mutex_destroy(&data.m_print);
 	pthread_mutex_destroy(&data.m_dead);
+	free(data.spoon_arr);
 	free(data.philo_arr);
 	return 1;	
 }

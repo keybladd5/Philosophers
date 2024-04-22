@@ -30,7 +30,7 @@
 # define EAT_INIT 3
 # define EAT_END 4
 # define SPOON 5
-# define SPOON2 6
+# define DIED 6
 # define THINK 7
 # define SLEEP 8
 
@@ -66,7 +66,7 @@ struct s_philo
 int		ft_atoi(const char *str);
 size_t	get_current_time(void);
 int		ft_usleep(size_t milliseconds);
-void	print_mutex(t_philo *philo, int type);
+void	print_mutex(t_philo *philo, int type, int spoon);
 
 //Check_and_errors
 

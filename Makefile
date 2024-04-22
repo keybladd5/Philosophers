@@ -13,7 +13,7 @@
 NAME = philosophers
 SRCS = main.c utils.c routine.c check_and_errors.c
 INCLUDES = philosophers.h colors.h
-FLAGS = -Wall -Wextra -Werror -pthread -g -fsanitize=thread -MMD
+FLAGS = -Wall -Wextra -Werror -pthread -g -MMD -fsanitize=thread
 OBJS = $(addprefix .temporal_files/,$(SRCS:.c=.o))  # Modificado para que los objetos se guarden en .temporal_files/
 DEPS = $(addprefix .temporal_files/,$(SRCS:.c=.d))  # Modificado para que los archivos de dependencias se guarden en .temporal_files/
 
