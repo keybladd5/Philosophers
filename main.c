@@ -12,8 +12,7 @@
 
 #include "philosophers.h"
 
-//gcc main.c utils.c -pthread -g -fsanitize=thread -Werror -Wall -Wextra
-
+//to debug
 void	debug(t_philo *philo)
 {
 	size_t current_time;
@@ -28,56 +27,50 @@ void	debug(t_philo *philo)
 	pthread_mutex_unlock(&philo->data->m_print);
 }
 
-void	ft_eat(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->data->spoon_arr[philo->nbr - 1]);
-	pthread_mutex_lock(&philo->data->m_print);
-	printf("%zu philo %d take an spoon %d\n",(get_current_time() - philo->data->start), philo->nbr, (philo->nbr - 1));
-	pthread_mutex_unlock(&philo->data->m_print);
-	pthread_mutex_lock(&philo->data->spoon_arr[philo->nbr]);
-	pthread_mutex_lock(&philo->data->m_print);
-	printf("%zu philo %d take an spoon %d\n", (get_current_time() - philo->data->start), philo->nbr, philo->nbr);
-	pthread_mutex_unlock(&philo->data->m_print);
-	pthread_mutex_lock(&philo->data->m_print);
-	printf("%zu philo %d eats\n", (get_current_time() - philo->data->start), philo->nbr);
-	pthread_mutex_unlock(&philo->data->m_print);
-	ft_usleep(philo->data->time_eat);
-	pthread_mutex_lock(&philo->data->m_print);
-	printf("%zu philo %d finish eating\n", (get_current_time() - philo->data->start), philo->nbr);
-	pthread_mutex_unlock(&philo->data->m_print);
-	pthread_mutex_unlock(&philo->data->spoon_arr[philo->nbr - 1]);
-	pthread_mutex_unlock(&philo->data->spoon_arr[philo->nbr]);
+int	dead_loop(t_philo *philo)
+{	
+	//pthread_mutex_lock(&philo->data->m_dead);
+	if (((get_current_time() - philo->data->start) - philo->last_meal) >= philo->data->time_die)
+	{	
+		pthread_mutex_lock(&philo->data->m_print);
+		printf("tiempo de start %zu\n", philo->data->start);
+		printf("tiempo para morir %zu\n", philo->data->time_die);
+		printf("%d ", philo->nbr);
+		printf("filo muerto\n");
+		pthread_mutex_unlock(&philo->data->m_print);
+		return (1);
+	}
+	//pthread_mutex_unlock(&philo->data->m_dead);
+	return (0);
 }
-void rutina(t_philo *philo)
-{
-	ft_eat(philo);
-	//pensar
-	//dormir
-}
-
+//TO-DO: Checker arguments and protect pthread funcs 
 int	main(int argc, char *argv[])
 {
 	t_data	data;
 
 	if (argc < 5 || argc > 6)
 		return (1);
-
 	int i = 0;
 	memset(&data, 0, sizeof(t_data));
-	data.n_philo = ft_atoi(argv[1]);
-	data.time_die = ft_atoi(argv[2]);
-	data.time_eat = ft_atoi(argv[3]);
-	data.time_sleep = ft_atoi(argv[4]);
+	if (check_and_assigns_argv(argv, &data))
+		return (ARGV_ERROR);
 	data.philo_arr = (t_philo *)malloc(sizeof(t_philo) * data.n_philo);
+	if (!data.philo_arr)
+		return (MALLOC_ERROR);
 	data.spoon_arr = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * data.n_philo);
+	if (!data.spoon_arr)
+		return (free(data.philo_arr), MALLOC_ERROR);	
 	pthread_mutex_init(&data.m_print, NULL);
+	pthread_mutex_init(&data.m_dead, NULL);
 	data.start = get_current_time();
 	while(i < data.n_philo)
 	{
-		data.philo_arr[i].nbr = i+1;
+		data.philo_arr[i].nbr = i+1;// El primer philo es l nbr i+1 = 0+1 = 1
 		data.philo_arr[i].data = &data;
+		data.philo_arr[i].count_meals = 0;
+		data.philo_arr[i].last_meal = 0;
 		pthread_mutex_init(&data.spoon_arr[i], NULL);
-		pthread_create(&data.philo_arr[i].id, NULL, (void *)rutina, &data.philo_arr[i]);
+		pthread_create(&data.philo_arr[i].id, NULL, (void *)routine, &data.philo_arr[i]);
 		i++;
 	}
 	i = 0;
@@ -88,6 +81,7 @@ int	main(int argc, char *argv[])
 		i++;
 	}
 	pthread_mutex_destroy(&data.m_print);
+	pthread_mutex_destroy(&data.m_dead);
 	free(data.philo_arr);
 	return 1;	
 }

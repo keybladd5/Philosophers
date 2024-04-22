@@ -12,18 +12,6 @@
 
 #include "philosophers.h"
 
-//Take string and returns a pointer to the c character occurrence
-static char	*ft_strchr(const char *s, int c)
-{
-	if (!s)
-		return (NULL);
-	while (*(char *)s && *(char *)s != (char)c)
-		s++;
-	if (*(char *)s != (char)c)
-		return (0);
-	return ((char *)s);
-}
-
 // Gets the current time in milliseconds
 size_t	get_current_time(void)
 {
@@ -53,7 +41,8 @@ int	ft_atoi(const char *str)
 
 	output = 0;
 	sign = 1;
-	while (*str && (ft_strchr("\n\t\v\f\r ", *str)) != NULL)
+	while (*str && (*str == ' ' || *str == '\t' || *str == '\n'\
+	 || *str == '\v' || *str == '\f' || *str == '\r'))
 		str++;
 	if (*str == '+')
 		str++;
@@ -62,11 +51,34 @@ int	ft_atoi(const char *str)
 		str++;
 		sign = -1;
 	}
-	while (*str && (ft_strchr("0123456789", *str)) != NULL)
+	while (*str && (*str >= '0' && *str <= '9'))
 	{
 		output = (output * 10) + (*str - '0');
 		str++;
 	}
 	return (output * sign);
+}
+
+//take the mutex to print to protect the action, print the current time
+//and print a message based on type var
+void	print_mutex(t_philo *philo, int type)
+{
+	pthread_mutex_lock(&philo->data->m_print);
+	printf(ICYAN);
+	printf("%zu miliseconds ▻ ", (get_current_time() - philo->data->start));
+	printf(RESET);
+	if (type == EAT_INIT)
+		printf("philo %d eats\n", philo->nbr);
+	else if (type == EAT_END)
+		printf("philo %d finish eating\n", philo->nbr);
+	else if (type == SPOON)
+		printf("philo %d take the spoon %d\n", philo->nbr, (philo->nbr - 1));
+	else if (type == SPOON2)
+		printf("philo %d take the spoon %d\n", philo->nbr, philo->nbr);
+	else if (type == THINK)
+		printf("philo %d is thinking\n", philo->nbr);
+	else if (type == SLEEP)
+		printf("philo %d is sleeping\n", philo->nbr);
+	pthread_mutex_unlock(&philo->data->m_print);
 }
 
