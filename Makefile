@@ -11,7 +11,7 @@
 # **************************************************************************** #
 
 NAME = philosophers
-SRCS = main.c utils.c routine.c check_and_errors.c
+SRCS = main.c utils.c routine.c check_and_errors.c monitoring.c
 INCLUDES = philosophers.h colors.h
 FLAGS = -Wall -Wextra -Werror -pthread -g -MMD -fsanitize=thread
 OBJS = $(addprefix .temporal_files/,$(SRCS:.c=.o))  # Modificado para que los objetos se guarden en .temporal_files/

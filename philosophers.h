@@ -47,6 +47,8 @@ typedef struct s_data
 	size_t			start;
 	pthread_mutex_t	m_print;
 	pthread_mutex_t	m_dead;
+	pthread_mutex_t	m_count_meals;
+	pthread_mutex_t	m_last_meal;
 	pthread_mutex_t *spoon_arr;
 	t_philo			*philo_arr;
 }	t_data;
@@ -67,6 +69,7 @@ int		ft_atoi(const char *str);
 size_t	get_current_time(void);
 int		ft_usleep(size_t milliseconds);
 void	print_mutex(t_philo *philo, int type, int spoon);
+size_t	ft_time_elapsed(void);
 
 //Check_and_errors
 
@@ -77,6 +80,10 @@ int		checker_arg_chr(char *str);
 
 void	routine(t_philo *philo);
 void	ft_eat(t_philo *philo);
+
+//Monitoring
+
+int ft_monitoring(t_data *data);
 
 //Main
 

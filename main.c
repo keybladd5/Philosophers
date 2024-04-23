@@ -66,7 +66,9 @@ int	main(int argc, char *argv[])
 		return (free(data.philo_arr), MALLOC_ERROR);	
 	pthread_mutex_init(&data.m_print, NULL);
 	pthread_mutex_init(&data.m_dead, NULL);
-	data.start = get_current_time();
+	pthread_mutex_init(&data.m_last_meal, NULL);
+	pthread_mutex_init(&data.m_count_meals, NULL);
+	data.start = ft_time_elapsed();
 	while(i < data.n_philo)
 	{
 		data.philo_arr[i].nbr = i+1;// El primer philo es l nbr i+1 = 0+1 = 1
@@ -78,33 +80,21 @@ int	main(int argc, char *argv[])
 		i++;
 	}
 	//MONITOR LOOP
-	while (!data.die_flag)	
+	if (ft_monitoring(&data))
 	{
 		i = 0;
-		while (i < data.n_philo)
+		while(i < data.n_philo)
 		{
-			if ((get_current_time() - data.start) > (data.philo_arr[i].last_meal + data.time_die))
-			{
-				pthread_mutex_lock(&data.m_print);
-				printf ("%zu %d", get_current_time() - data.start, data.philo_arr[i].nbr);
-				printf (" has died\n");
-				pthread_mutex_unlock(&data.m_print);
-				data.die_flag = 1;
-				break ;
-			}
+			pthread_join(data.philo_arr[i].id, NULL);
+			pthread_mutex_destroy(&data.spoon_arr[i]);
 			i++;
 		}
+		pthread_mutex_destroy(&data.m_print);
+		pthread_mutex_destroy(&data.m_dead);
+		pthread_mutex_destroy(&data.m_last_meal);
+		pthread_mutex_destroy(&data.m_count_meals);
+		free(data.spoon_arr);
+		free(data.philo_arr);
 	}
-	i = 0;
-	while(i < data.n_philo)
-	{
-		pthread_join(data.philo_arr[i].id, NULL);
-		pthread_mutex_destroy(&data.spoon_arr[i]);
-		i++;
-	}
-	pthread_mutex_destroy(&data.m_print);
-	pthread_mutex_destroy(&data.m_dead);
-	free(data.spoon_arr);
-	free(data.philo_arr);
 	return 1;	
 }

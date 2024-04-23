@@ -31,19 +31,19 @@ int check_and_assigns_argv(char *argv[], t_data *data)
 {
 	if (checker_arg_chr(argv[1]) || checker_arg_chr(argv[2]) || \
 	checker_arg_chr(argv[3]) || checker_arg_chr(argv[4]))
-		return (1);
+		return (ARGV_ERROR);
 	if (argv[5] && checker_arg_chr(argv[5]))
 		return (ARGV_ERROR);
 	else if ((argv[5] && !checker_arg_chr(argv[5])))
 		data->must_meals = ft_atoi(argv[5]);
 	else
-		data->must_meals = -1;
+		data->must_meals = INT_MAX;
 	data->n_philo = ft_atoi(argv[1]);
 	data->time_die = ft_atoi(argv[2]);
 	data->time_eat = ft_atoi(argv[3]);
 	data->time_sleep = ft_atoi(argv[4]);
 	if (data->n_philo <= 0 || data->time_die <= 0 || \
 	data->time_eat <= 0 || data->time_sleep <= 0)
-		return (1);
+		return (ARGV_ERROR);
 	return (0);
 }
