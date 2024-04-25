@@ -63,9 +63,8 @@ int	ft_atoi(const char *str)
 //and print a message based on type var
 void	print_mutex(t_philo *philo, int type, int spoon)
 {
-	//pendiente añadir una protecion para no printear si el philo que llama a esta funcion esta muerto
 	pthread_mutex_lock(&philo->data->m_dead);
-	if (philo->data->die_flag)
+	if (philo->data->die_flag || philo->count_meals >= philo->data->must_meals)
 	{
 		pthread_mutex_unlock(&philo->data->m_dead);
 		return ;
@@ -79,8 +78,6 @@ void	print_mutex(t_philo *philo, int type, int spoon)
 		(void)spoon;
 	if (type == EAT_INIT)
 		printf("philo %d eats\n", philo->nbr);
-	else if (type == EAT_END)
-		printf("philo %d finish eating\n", philo->nbr);
 	else if (type == SPOON)
 		printf("philo %d take the spoon %d\n", philo->nbr, spoon);
 	else if (type == THINK)

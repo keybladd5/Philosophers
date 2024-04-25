@@ -25,14 +25,20 @@ static int	ft_die_monitor(t_data *data)
 	{
 		if (ft_time_elapsed() > limit)
 		{
-			pthread_mutex_lock(&data->m_print);
-			printf ("%zu %d", ft_time_elapsed(), data->philo_arr[i].nbr);
-			printf (" has died\n");
-			pthread_mutex_unlock(&data->m_print);
-			pthread_mutex_lock(&(data)->m_dead);
-			data->die_flag = 1;
-			pthread_mutex_unlock(&(data)->m_dead);
-			return (1);
+			pthread_mutex_lock(&data->m_is_eating);
+			if (!data->philo_arr[i].is_eating)
+			{	
+				pthread_mutex_unlock(&data->m_is_eating);
+				pthread_mutex_lock(&(data)->m_dead);
+				data->die_flag = 1;
+				pthread_mutex_unlock(&(data)->m_dead);
+				pthread_mutex_lock(&data->m_print);
+				printf ("%zu %d", ft_time_elapsed(), data->philo_arr[i].nbr);
+				printf (" has died\n");
+				pthread_mutex_unlock(&data->m_print);
+				return (1);
+			}
+			pthread_mutex_unlock(&data->m_is_eating);
 		}
 		i++;
 	}
@@ -57,6 +63,7 @@ static int	ft_meals_monitor(t_data *data)
 			return 	(0);
 		i++;
 	}
+	printf("all philos ate %d times\n", data->must_meals);
 	return (1);
 }
 

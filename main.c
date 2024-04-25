@@ -12,41 +12,6 @@
 
 #include "philosophers.h"
 
-//to debug
-void	debug(t_philo *philo)
-{
-	size_t current_time;
-
-	pthread_mutex_lock(&philo->data->m_print);
-	current_time = get_current_time() - philo->data->start;
-	printf ("%zu ", current_time);
-	printf("hola soy el filo ");
-	printf(UBLUE);
-	printf("%d\n", philo->nbr);
-	printf(RESET);
-	pthread_mutex_unlock(&philo->data->m_print);
-}
-
-int	dead_loop(t_philo *philo)
-{
-	pthread_mutex_lock(&philo->data->m_dead);
-	if (philo->data->die_flag)
-	{	
-		/*pthread_mutex_lock(&philo->data->m_print);
-		elapsed_time = get_current_time() - philo->data->start;
-		printf("tiempo de actual %zu\n", elapsed_time);
-		printf("tiempo de last_meal %zu\n", philo->last_meal);
-		printf("resultado : %zu ", elapsed_time - philo->last_meal);
-		printf("tiempo para morir %zu\n", philo->data->time_die);
-		printf("%d ", philo->nbr);
-		printf("filo muerto\n");
-		pthread_mutex_unlock(&philo->data->m_print);*/
-		pthread_mutex_unlock(&philo->data->m_dead);
-		return (1);
-	}
-	pthread_mutex_unlock(&philo->data->m_dead);
-	return (0);
-}
 //TO-DO: Checker arguments and protect pthread funcs 
 int	main(int argc, char *argv[])
 {
@@ -68,6 +33,7 @@ int	main(int argc, char *argv[])
 	pthread_mutex_init(&data.m_dead, NULL);
 	pthread_mutex_init(&data.m_last_meal, NULL);
 	pthread_mutex_init(&data.m_count_meals, NULL);
+	pthread_mutex_init(&data.m_is_eating, NULL);
 	data.start = ft_time_elapsed();
 	while(i < data.n_philo)
 	{
@@ -75,6 +41,7 @@ int	main(int argc, char *argv[])
 		data.philo_arr[i].data = &data;
 		data.philo_arr[i].count_meals = 0;
 		data.philo_arr[i].last_meal = 0;
+		data.philo_arr[i].is_eating = 0;
 		pthread_mutex_init(&data.spoon_arr[i], NULL);
 		pthread_create(&data.philo_arr[i].id, NULL, (void *)routine, &data.philo_arr[i]);
 		i++;
@@ -83,16 +50,19 @@ int	main(int argc, char *argv[])
 	if (ft_monitoring(&data))
 	{
 		i = 0;
+		printf("termino el programa en %zu\n", ft_time_elapsed());
 		while(i < data.n_philo)
 		{
 			pthread_join(data.philo_arr[i].id, NULL);
 			pthread_mutex_destroy(&data.spoon_arr[i]);
 			i++;
 		}
+		printf("se terminaron de unir los threads en %zu\n", ft_time_elapsed());
 		pthread_mutex_destroy(&data.m_print);
 		pthread_mutex_destroy(&data.m_dead);
 		pthread_mutex_destroy(&data.m_last_meal);
 		pthread_mutex_destroy(&data.m_count_meals);
+		pthread_mutex_destroy(&data.m_is_eating);
 		free(data.spoon_arr);
 		free(data.philo_arr);
 	}

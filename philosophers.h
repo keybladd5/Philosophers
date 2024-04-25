@@ -28,7 +28,8 @@
 
 //TYPES
 # define EAT_INIT 3
-# define EAT_END 4
+# define TAKE_IN 4
+# define TAKE_OFF 9
 # define SPOON 5
 # define DIED 6
 # define THINK 7
@@ -49,6 +50,7 @@ typedef struct s_data
 	pthread_mutex_t	m_dead;
 	pthread_mutex_t	m_count_meals;
 	pthread_mutex_t	m_last_meal;
+	pthread_mutex_t	m_is_eating;
 	pthread_mutex_t *spoon_arr;
 	t_philo			*philo_arr;
 }	t_data;
@@ -59,6 +61,7 @@ struct s_philo
 	int			count_meals;
 	pthread_t	id;
 	size_t		last_meal;
+	int			is_eating;
 	t_data		*data;
 };
 

@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   colors.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmota-bu <nmota-bu@student.42barcel>       +#+  +:+       +#+        */
+/*   By: polmarti <polmarti@student.42barcel>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/10 00:37:54 by nmota-bu          #+#    #+#             */
-/*   Updated: 2023/09/14 17:29:00 by nmota-bu         ###   ########.fr       */
+/*   Created: 2024/04/25 11:56:00 by polmarti          #+#    #+#             */
+/*   Updated: 2024/04/25 11:56:02 by polmarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef COLORS_H
 # define COLORS_H
