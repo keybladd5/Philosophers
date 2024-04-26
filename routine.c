@@ -15,7 +15,7 @@
 /*Mutex the two spoons, if the last philosopher calls this function,
 take the spoon 0 as the right spoon.
 Print with mutex the spoon taken.*/
-void spoon_handler(t_philo *philo, int mode)
+void	spoon_handler(t_philo *philo, int mode)
 {
 	if (mode == TAKE_IN)
 	{
@@ -33,12 +33,13 @@ void spoon_handler(t_philo *philo, int mode)
 	else
 	{
 		pthread_mutex_unlock(&philo->data->spoon_arr[philo->nbr - 1]);
-	if (philo->nbr == philo->data->n_philo)
-		pthread_mutex_unlock(&philo->data->spoon_arr[0]);
-	else
-		pthread_mutex_unlock(&philo->data->spoon_arr[philo->nbr]);
+		if (philo->nbr == philo->data->n_philo)
+			pthread_mutex_unlock(&philo->data->spoon_arr[0]);
+		else
+			pthread_mutex_unlock(&philo->data->spoon_arr[philo->nbr]);
 	}
 }
+
 /*Print with mutex the "sleep" message, and call the own function 
 to wait a milliseconds time.*/
 void	ft_sleep(t_philo *philo)
@@ -68,7 +69,7 @@ void	ft_think(t_philo *philo)
    and iterate the philo->count_meals variable with mutex. */
 void	ft_eat(t_philo *philo)
 {
-	spoon_handler(philo, TAKE_IN); //new  call
+	spoon_handler(philo, TAKE_IN);
 	print_mutex(philo, EAT_INIT, 0);
 	pthread_mutex_lock(&philo->data->m_last_meal);
 	philo->last_meal = ft_time_elapsed();
@@ -83,7 +84,7 @@ void	ft_eat(t_philo *philo)
 	pthread_mutex_lock(&philo->data->m_is_eating);
 	philo->is_eating = 0;
 	pthread_mutex_unlock(&philo->data->m_is_eating);
-	spoon_handler(philo, TAKE_OFF);//new  call
+	spoon_handler(philo, TAKE_OFF);
 }
 
 /*The main routine executed by a philosopher thread.
@@ -100,14 +101,14 @@ void	ft_eat(t_philo *philo)
  reaches the required meals or the die_flag is true.*/
 void	routine(t_philo *philo)
 {
-	int die_flag;
+	int	die_flag;
 
 	if (philo->nbr % 2 == 0)
 		ft_usleep(philo->data->time_eat);
-	while(philo->count_meals < philo->data->must_meals)
+	while (philo->count_meals < philo->data->must_meals)
 	{
 		pthread_mutex_lock(&philo->data->m_dead);
-		die_flag =  philo->data->die_flag;
+		die_flag = philo->data->die_flag;
 		pthread_mutex_unlock(&philo->data->m_dead);
 		if (die_flag)
 			return ;

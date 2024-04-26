@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #ifndef COLORS_H
 # define COLORS_H
 
@@ -66,16 +65,3 @@
 # define FLECHAD "\u2911"
 
 #endif
-
-// DHOR		════════════════════════
-// LSHADE	░░░░░░░░░░░░░░░░░░░░░░░░
-// MSHADE	▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒▒
-// MSHADE	▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
-// FBLOCK	████████████████████████
-// EBLOCK	▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍▍
-// FLECHAD	⤑⤑⤑⤑⤑⤑⤑⤑⤑⤑⤑⤑⤑⤑⤑
-
-// \x1B es la secuencia de escape ANSI.
-// [3m activa el formato de texto en cursiva.
-// [38;2;255;165;0m establece el color utilizando
-// el modelo de color RGB para obtener naranja.

@@ -36,13 +36,13 @@ int	ft_usleep(size_t milliseconds)
 //Convert a string to an integer
 int	ft_atoi(const char *str)
 {
-	int output;
+	int	output;
 	int	sign;
 
 	output = 0;
 	sign = 1;
 	while (*str && (*str == ' ' || *str == '\t' || *str == '\n'\
-	 || *str == '\v' || *str == '\f' || *str == '\r'))
+		|| *str == '\v' || *str == '\f' || *str == '\r'))
 		str++;
 	if (*str == '+')
 		str++;
@@ -87,11 +87,12 @@ void	print_mutex(t_philo *philo, int type, int spoon)
 	pthread_mutex_unlock(&philo->data->m_print);
 }
 
+//Returns the actual time in the func call
 size_t	ft_time_elapsed(void)
 {
-	static size_t start = 0;
+	static size_t	start = 0;
 
 	if (start == 0)
 		start = get_current_time();
-	return (get_current_time() -  start);
+	return (get_current_time() - start);
 }

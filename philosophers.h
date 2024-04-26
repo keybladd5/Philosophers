@@ -35,7 +35,7 @@
 # define THINK 7
 # define SLEEP 8
 
-typedef struct s_philo t_philo;
+typedef struct s_philo	t_philo;
 
 typedef struct s_data
 {
@@ -51,7 +51,7 @@ typedef struct s_data
 	pthread_mutex_t	m_count_meals;
 	pthread_mutex_t	m_last_meal;
 	pthread_mutex_t	m_is_eating;
-	pthread_mutex_t *spoon_arr;
+	pthread_mutex_t	*spoon_arr;
 	t_philo			*philo_arr;
 }	t_data;
 
@@ -65,7 +65,6 @@ struct s_philo
 	t_data		*data;
 };
 
-
 //Utils
 
 int		ft_atoi(const char *str);
@@ -76,7 +75,10 @@ size_t	ft_time_elapsed(void);
 
 //Check_and_errors
 
-int 	check_and_assigns_argv(char *argv[], t_data *data);
+void	ft_destroy_mutex(t_data *data, int n);
+void	ft_destroy_pthreads(t_data *data, int n);
+int		ft_safe_especific_mutex(t_data *data);
+int		check_and_assigns_argv(char *argv[], t_data *data);
 int		checker_arg_chr(char *str);
 
 //Routine
@@ -86,10 +88,12 @@ void	ft_eat(t_philo *philo);
 
 //Monitoring
 
-int ft_monitoring(t_data *data);
+void	ft_only_one_philo(void);
+int		ft_monitoring(t_data *data);
 
 //Main
 
-int	dead_loop(t_philo *philo);
+void	ft_destroy_data(t_data *data);
+int		ft_init_data_and_pthreads(t_data *data);
 
 #endif
