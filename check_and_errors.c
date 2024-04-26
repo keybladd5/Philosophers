@@ -69,13 +69,17 @@ int	ft_safe_especific_mutex(t_data *data)
 //check if the str are only numerical
 int	checker_arg_chr(char *str)
 {
+	int i;
+
+	i = 0;
 	if (!str)
 		return (1);
 	while (*str)
 	{
-		if (*str < '0' || *str > '9')
+		if (*str < '0' || *str > '9' || i > 10)
 			return (1);
 		str++;
+		i++;
 	}
 	return (0);
 }
