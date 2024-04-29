@@ -104,7 +104,7 @@ void	routine(t_philo *philo)
 	int	die_flag;
 
 	if (philo->nbr % 2 == 0)
-		ft_usleep(philo->data->time_eat);
+		ft_usleep(100);
 	while (philo->count_meals < philo->data->must_meals)
 	{
 		pthread_mutex_lock(&philo->data->m_dead);

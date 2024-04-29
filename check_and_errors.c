@@ -18,7 +18,7 @@ void	ft_destroy_mutex(t_data *data, int n)
 	int	i;
 
 	i = 0;
-	while (i <= n)
+	while (i < n)
 	{
 		pthread_mutex_destroy(&data->spoon_arr[i]);
 		i++;
@@ -31,7 +31,7 @@ void	ft_destroy_pthreads(t_data *data, int n)
 	int	i;
 
 	i = 0;
-	while (i <= n)
+	while (i < n)
 	{
 		pthread_join(data->philo_arr[i].id, NULL);
 		i++;
@@ -69,7 +69,7 @@ int	ft_safe_especific_mutex(t_data *data)
 //check if the str are only numerical
 int	checker_arg_chr(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!str)
